@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/kotiln-design-pattern.iml" filepath="$PROJECT_DIR$/kotiln-design-pattern.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotiln-design-pattern.main.iml" filepath="$PROJECT_DIR$/.idea/modules/kotiln-design-pattern.main.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/kotiln-design-pattern.test.iml" filepath="$PROJECT_DIR$/.idea/modules/kotiln-design-pattern.test.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kotlin-sample.iml" filepath="$PROJECT_DIR$/kotlin-sample.iml" />
+    </modules>
+  </component>
+</project>

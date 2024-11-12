@@ -56,6 +56,12 @@ fun main() {
     cellPhone(charger(krPowerOutlet().toPlugTypeA()).toUsbTypeC())
 }
 
+/**
+ * 코틀린에서 어댑터 패턴은 확장 함수를 이용해 구현할 수 있다.
+ * 어댑터 메서드의 일반적인 이름은 `to` 로 시작한다.
+ *
+ * 가령 toTypedArray() 함수는 리스트를 배열로 변환한다.
+ */
 fun PlugTypeF.toPlugTypeA(): PlugTypeA {
     val hasPower = if (this.hasPower == 1) "TRUE" else "FALSE"
     return object : PlugTypeA {

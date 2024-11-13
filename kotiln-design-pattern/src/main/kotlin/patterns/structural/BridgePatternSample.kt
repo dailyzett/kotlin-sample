@@ -16,59 +16,69 @@ package org.example.patterns.structural
  * 뿐만 아니라 부모 클래스를 수정했을 때 자식 클래스에서 발견하기 어려운 버그가 발생하는 것도 막는다(깨지기 쉬운 기반 클래스 문제)
  */
 
-typealias PointOfDamage = Long
-typealias Meter = Int
-
-const val RIFLE_DAMAGE = 3L
-const val REGULAR_SPEED: Meter = 1
-
-interface Weapon {
-    fun attack(): PointOfDamage
-}
-
-interface Legs {
-    fun move(): Meter
-}
-
-/**
- * 무기에 관한 구현
- */
-
-class Rifle : Weapon {
-    override fun attack(): PointOfDamage = RIFLE_DAMAGE
-}
-
-class Flamethrower : Weapon {
-    override fun attack(): PointOfDamage = RIFLE_DAMAGE * 2
-}
-
-class Batton : Weapon {
-    override fun attack(): PointOfDamage = RIFLE_DAMAGE * 3
-}
-
-/**
- * 이동에 관한 인터페이스 구현
- */
-class RegularLegs : Legs {
-    override fun move(): Meter = REGULAR_SPEED
-}
-
-class AthleticLegs : Legs {
-    override fun move(): Meter = REGULAR_SPEED * 2
-}
-
-
-data class StormTrooper(
-    private val weapon: Weapon,
-    private val legs: Legs,
-)
-
-/**
- * 현업에서 브리지 패턴은 의존성 주입과 함께 사용될 때가 많다. 브리지 패턴을 사용하면 데이터베이스를 사용하는 구현체를
- * 쉽게 목 객체로 대체할 수 있기 때문이다.
- */
 fun main() {
     val stormTrooper = StormTrooper(Rifle(), RegularLegs())
     val flameTrooper = StormTrooper(Flamethrower(), RegularLegs())
     val scoutTrooper = StormTrooper(Rifle(), AthleticLegs())
+
+    println(listOf(stormTrooper, flameTrooper, scoutTrooper))
 }
+
+interface Trooper {
+    fun move(x: Long, y: Long)
+
+    fun attackRebel(x: Long, y: Long)
+}
+
+/**
+ * StormTrooper 가 받는 속성도 인터페이스여야 한다. 그래야 나중에 어떤 속성을 사용할 지 결정할 수 있기 때문이다.
+ */
+data class StormTrooper(
+    private val weapon: Weapon,
+    private val legs: Legs
+) : Trooper {
+    override fun move(x: Long, y: Long) {
+        legs.move(x, y)
+    }
+
+    override fun attackRebel(x: Long, y: Long) {
+        println("Attacking")
+        weapon.attack(x, y)
+    }
+}
+
+typealias PointsOfDamage = Long
+typealias Meters = Int
+
+interface Weapon {
+    fun attack(x: Long, y: Long): PointsOfDamage
+}
+
+interface Legs {
+    fun move(x: Long, y: Long): Meters
+}
+
+const val RIFLE_DAMAGE = 3L
+const val REGULAR_SPEED: Meters = 1
+
+class Rifle : Weapon {
+    override fun attack(x: Long, y: Long) = RIFLE_DAMAGE
+}
+
+class Flamethrower : Weapon {
+    override fun attack(x: Long, y: Long) = RIFLE_DAMAGE * 2
+}
+
+
+class Batton : Weapon {
+    override fun attack(x: Long, y: Long) = RIFLE_DAMAGE * 3
+}
+
+class RegularLegs : Legs {
+    override fun move(x: Long, y: Long) = REGULAR_SPEED
+}
+
+class AthleticLegs : Legs {
+    override fun move(x: Long, y: Long) = REGULAR_SPEED * 2
+}
+

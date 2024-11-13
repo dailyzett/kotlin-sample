@@ -12,24 +12,6 @@ interface ServerConfiguration {
     val properties: List<Property>
 }
 
-data class PropertyImpl(
-    override val name: String,
-    override val value: Any
-): Property
-
-data class ServerConfigurationImpl(
-    override val properties: List<Property>
-): ServerConfiguration
-
-fun property(prop: String): Property {
-    val (name, value) = prop.split(":")
-    return when(name) {
-        "port" -> PropertyImpl(name, value.trim().toInt())
-        "environment" -> PropertyImpl(name, value.trim())
-        else -> throw RuntimeException("Unsupported property $name")
-    }
-}
-
 fun createConfiguration(factory: ConfigurationFactory, propertyStrings: List<String>): ServerConfiguration {
     val parsedProperties = mutableListOf<Property>()
     for(p in propertyStrings) {
@@ -47,6 +29,15 @@ interface ConfigurationFactory {
 }
 
 // 개발 환경용 구체적인 팩토리
+data class DevPropertyImpl(
+    override val name: String,
+    override val value: Any
+): Property
+
+data class DevServerConfigurationImpl(
+    override val properties: List<Property>
+) : ServerConfiguration
+
 class DevelopmentConfigurationFactory : ConfigurationFactory {
     override fun createProperty(name: String, value: String): Property {
         return when(name) {
@@ -61,14 +52,6 @@ class DevelopmentConfigurationFactory : ConfigurationFactory {
     }
 }
 
-data class DevPropertyImpl(
-    override val name: String,
-    override val value: Any
-): Property
-
-data class DevServerConfigurationImpl(
-    override val properties: List<Property>
-) : ServerConfiguration
 
 fun main() {
     val devFactory = DevelopmentConfigurationFactory()
